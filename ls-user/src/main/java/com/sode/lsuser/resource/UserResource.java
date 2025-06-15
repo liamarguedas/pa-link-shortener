@@ -7,54 +7,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sode.lsuser.dto.UserDTO;
 import com.sode.lsuser.entity.User;
 import com.sode.lsuser.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class UserResource {
-	
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping("/all")
-	public ResponseEntity<List<User>> checkAll(){
-		
+	public ResponseEntity<List<User>> checkAll() {
+
 		List<User> all = userService.checkAll();
-		
+
 		return ResponseEntity.ok().body(all);
 	}
-	
+
 	@PostMapping("/register")
-	public ResponseEntity<Void> createUser(
-			@RequestParam String name,
-			@RequestParam String username,
-			@RequestParam String email,
-			@RequestParam String password) {
+	public ResponseEntity<Void> createUser(@RequestBody UserDTO udto) {
 
-
-		User u = new User(null, name, username, email, password);
+		User u = new User(null, udto.getName(), udto.getUsername(), udto.getEmail(), udto.getPassword());
 
 		try {
-		userService.createUser(u);
-		}
-		catch (Exception e) {
+			userService.createUser(u);
+		} catch (Exception e) {
 
 			// TODO -------------------------------------
 			// HANDLE USERNAME/EMAILS ALREADY REGISTERED!
-			
 			e.printStackTrace();
-		}		
-		
-		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-		
-	}
-	
 
+		}
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+
+	}
 
 }

@@ -24,41 +24,40 @@ public class Link implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String url;
 	private String redirect;
 	
 	private Instant expiration;
 	
-	@ManyToOne
-	private User owner;
+//	@ManyToOne
+//	private User owner;
 	
-	private String accesssKey;
+	private String accessKey;
 	
 	public Link() {}
 
-	public Link(Long id, String url, String redirect, Instant expiration, User owner) {
+	public Link(Long id, String redirect, Instant expiration ) {
 		this.id = id;
-		this.url = url;
 		this.redirect = redirect;
 		this.expiration = expiration;
-		this.accesssKey = Linker.generateAccessKey();
-		this.owner = owner;
+		this.accessKey = generateAccessKey(); 
+//		this.owner = owner;
 	}
 
+	private String generateAccessKey() {
+		
+		if(redirect != null) {
+			return Linker.generateAccessKey();
+		}
+		return null;
+	}
+	
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getRedirect() {
@@ -92,5 +91,9 @@ public class Link implements Serializable {
 			return false;
 		Link other = (Link) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public String getAccesssKey() {
+		return accessKey;
 	}
 }

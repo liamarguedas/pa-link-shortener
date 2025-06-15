@@ -61,6 +61,9 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public Set<Role> getRoles(){
+		return roles;
+	}
 
 	public Long getId() {
 		return id;
