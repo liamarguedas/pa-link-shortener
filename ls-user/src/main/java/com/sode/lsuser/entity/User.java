@@ -51,8 +51,6 @@ public class User implements Serializable {
 	
 	private List<Link> links = new ArrayList<>();
 	
-	
-	
 	public User() {}
 
 	public User(Long id, String name, String username, String email, String password) {
