@@ -16,7 +16,6 @@ public class LinkService {
 	@Autowired
 	private LinkRepository repository;
 	
-	
 	public List<Link> getAllLinks(){
 		
 		return repository.findAll();
@@ -40,6 +39,11 @@ public class LinkService {
 		Link l = repository.findByAccessKey(accessKey);
 
 		return l.getRedirect();
+	}
+	
+	
+	public void deleteLink(Long id) {
+		repository.deleteById(id);
 	}
 
 }
