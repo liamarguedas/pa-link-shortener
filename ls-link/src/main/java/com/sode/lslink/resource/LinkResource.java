@@ -3,7 +3,9 @@ package com.sode.lslink.resource;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,4 +43,12 @@ public class LinkResource {
 		String accessKey = service.createNewLink(redirect.getLink());
 		return ResponseEntity.ok().body(accessKey);
 	}
+	
+	@DeleteMapping("/revoke/{id}")
+	public ResponseEntity<Void> revokeLink(@PathVariable Long id){
+		service.deleteLink(id);
+		return ResponseEntity.status(HttpStatusCode.valueOf(204)).build();
+	}
+	
+	
 }

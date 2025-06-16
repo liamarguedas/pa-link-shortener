@@ -26,7 +26,7 @@ public class LinkService {
 
 		// Adjust as needed (1 day expiration limit)
 		Instant now = Instant.now();
-		Instant tomorrow = now.plus(1, ChronoUnit.DAYS);
+		Instant tomorrow = now.plus(2, ChronoUnit.MINUTES);
 		// ------------------------------------------
 		Link l = new Link(null, url, tomorrow);
 		repository.save(l);
