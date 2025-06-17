@@ -50,6 +50,5 @@ public class RevokerResource {
 
 		logger.info("Total revoked: " + toDelete.size());
 		logger.info("----- Revoke completed -----");
-			
 		}
 	}
