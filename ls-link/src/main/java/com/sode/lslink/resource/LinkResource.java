@@ -20,7 +20,7 @@ import com.sode.lslink.entity.Link;
 import com.sode.lslink.service.LinkService;
 
 @RestController
-@RequestMapping("/url")
+@RequestMapping("/urls")
 public class LinkResource {
 
 	@Autowired

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.sode.lsrevoker.entity.Link;
 
-@FeignClient(name="ls-link", path="/url")
+@FeignClient(name="ls-link", path="/urls")
 public interface FeignLink {
 	
 	@GetMapping

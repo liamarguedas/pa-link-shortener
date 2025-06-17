@@ -40,12 +40,13 @@ public class RevokerResource {
 		for (Link link : links) {
 			
 			logger.info("Link ID: " + link.getId());
+			logger.info("Current date: " + now);
 			logger.info("Expiration date: " + link.getExpiration());
 			logger.info("Needs to be deleted: " + now.isAfter(link.getExpiration()));
 			
 		}
 		
-		logger.info("Links to be revoke:: " + toDelete.size());
+		logger.info("Links to be revoke: " + toDelete.size());
 
 		logger.info("Total revoked: " + toDelete.size());
 		logger.info("----- Revoke completed -----");
