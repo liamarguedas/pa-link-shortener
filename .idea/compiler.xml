@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ls-eureka-server" />
+        <module name="ls-api-gateway" />
+        <module name="ls-link" />
+        <module name="ls-oauth" />
+        <module name="ls-user" />
+        <module name="ls-revoker" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ls-api-gateway" options="-parameters" />
+      <module name="ls-eureka-server" options="-parameters" />
+      <module name="ls-link" options="-parameters" />
+      <module name="ls-oauth" options="-parameters" />
+      <module name="ls-revoker" options="-parameters" />
+      <module name="ls-user" options="-parameters" />
+    </option>
+  </component>
+</project>
