@@ -1,26 +1,42 @@
 package com.sode.lsoauth.entity;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+
+@Entity
+@Table(name="tb_user")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
 	
+	@Column(unique=true)
 	private String username;
 
+	@Column(unique=true)
 	private String email;
 
 	private String password;
-
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "tb_user_role",
+			joinColumns = @JoinColumn(name="user_id"), 
+			inverseJoinColumns = @JoinColumn(name="role_id")
+			)
 	private Set<Role> roles = new HashSet<>();
-
+	
 	public User() {}
 
 	public User(Long id, String name, String username, String email, String password) {

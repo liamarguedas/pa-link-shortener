@@ -1,13 +1,13 @@
 package com.sode.lsuser.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.sode.lsuser.entity.Link;
 import com.sode.lsuser.entity.Role;
 import com.sode.lsuser.entity.User;
 import com.sode.lsuser.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -20,6 +20,19 @@ public class UserService {
 	
 	public List<User> checkAll() {
 		return userRepository.findAll();
+	}
+
+	public User findById(Long id) {
+		User u = userRepository.findById(id).orElse(null);
+		return u;
+	}
+
+	public void appendLink(Long id, Link link) {
+
+		User u = findById(id);
+		u.getLinks().add(link);
+		userRepository.save(u);
+
 	}
 	
 	
