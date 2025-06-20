@@ -32,8 +32,8 @@ public class UserResource {
 		return ResponseEntity.ok().body(u);
 	}
 
-	@PostMapping("/append")
-	public ResponseEntity<Void> appendLink (@RequestBody Long id, @RequestBody Link link) {
+	@PostMapping("/append/{id}/{link}")
+	public ResponseEntity<Void> appendLink (@PathVariable Long id, @PathVariable Link link) {
 		userService.appendLink(id, link);
 		return ResponseEntity.noContent().build();
 	}

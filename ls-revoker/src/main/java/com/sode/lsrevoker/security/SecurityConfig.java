@@ -1,4 +1,4 @@
-package com.sode.lslink.security;
+package com.sode.lsrevoker.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

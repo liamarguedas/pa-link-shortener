@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @Configuration
 public class AuthServerConfig {
-	
+
 	@Value("${property.issuer}")
 	private String issuer;
 
@@ -64,7 +64,6 @@ public class AuthServerConfig {
 				.redirectUri(issuer + "/login/oauth2/code/test")
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.authorizationGrantType(AuthorizationGrantType.PASSWORD) // POSTMAN TEMP DELETE BEFORE PROD ----------------------------------
 				.scope("read")
 				.scope("write")
 				.build();

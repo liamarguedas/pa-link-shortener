@@ -30,42 +30,28 @@ public class LinkService {
 	}
 
 	private Long getRegisteredUserId(){
-
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
 		if (auth instanceof JwtAuthenticationToken jwtAuth) {
-
 			String id = jwtAuth.getToken().getId();
-
 			return Long.parseLong(id);
-
 		} else {
-
 			return null;
-
 		}
 	}
 
 	public List<Link> getAllLinks(){
-		
 		return repository.findAll();
-		
 	}
 
 	public String createNewLink(String url) {
-
 		Instant now = Instant.now();
 		Instant expiration = isRegisteredUser() ? now.plus(5, ChronoUnit.YEARS) : now.plus(1, ChronoUnit.DAYS);
-
 		Link l = new Link(null, url, expiration);
-
 		if( isRegisteredUser() ) {
 			userRepository.appendLink(getRegisteredUserId(), l);
 		}
-
 		repository.save(l);
 		return l.getAccesssKey();
-
 	}
 
 	public String getRedirect(String accessKey) {
