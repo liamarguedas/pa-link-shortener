@@ -20,8 +20,10 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.time.Duration;
 import java.util.UUID;
 
 @Configuration
@@ -56,7 +58,7 @@ public class AuthServerConfig {
 	@Bean
 	RegisteredClientRepository registeredClientRepository() {
 
-		RegisteredClient registeredClient = RegisteredClient
+		RegisteredClient userClient = RegisteredClient
 				.withId(UUID.randomUUID().toString())
 				.clientId(client)
 				.clientSecret(passwordEncoder().encode(secret))
@@ -66,9 +68,22 @@ public class AuthServerConfig {
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 				.scope("read")
 				.scope("write")
+				.tokenSettings(TokenSettings.builder()
+						.accessTokenTimeToLive(Duration.ofDays(1))
+						.refreshTokenTimeToLive(Duration.ofDays(30))
+						.reuseRefreshTokens(true)
+						.build())
 				.build();
 
-		return new InMemoryRegisteredClientRepository(registeredClient);
+		RegisteredClient revokerClient = RegisteredClient
+				.withId(UUID.randomUUID().toString())
+				.clientId("revoker-client")
+				.clientSecret(passwordEncoder().encode("revoker-secret"))
+				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+				.scope("link:revoke")
+				.build();
+
+		return new InMemoryRegisteredClientRepository(userClient, revokerClient);
 	}
 
 	@Bean
