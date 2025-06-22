@@ -1,6 +1,5 @@
 package com.sode.lsuser.service;
 
-import com.sode.lsuser.entity.Link;
 import com.sode.lsuser.entity.Role;
 import com.sode.lsuser.entity.User;
 import com.sode.lsuser.repository.UserRepository;
@@ -27,15 +26,11 @@ public class UserService {
 		return u;
 	}
 
-	public void appendLink(Long id, Link link) {
-
-		User u = findById(id);
-		u.getLinks().add(link);
-		userRepository.save(u);
-
+	public User findByUsername(String username) {
+		User u = userRepository.findByUsername(username);
+		return  u;
 	}
-	
-	
+
 	public void createUser(User u) {
 		u.getRoles().add(userRole);
 		userRepository.save(u);

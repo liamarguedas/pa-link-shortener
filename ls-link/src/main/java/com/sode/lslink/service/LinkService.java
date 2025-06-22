@@ -1,6 +1,5 @@
 package com.sode.lslink.service;
 
-import com.sode.lslink.client.FeignUser;
 import com.sode.lslink.entity.Link;
 import com.sode.lslink.repository.LinkRepository;
 import jakarta.annotation.Nonnull;
@@ -18,27 +17,26 @@ public class LinkService {
 	@Autowired
 	private LinkRepository repository;
 
-	@Autowired
-	private FeignUser userRepository;
-
 	public List<Link> getAllLinks(){
 		return repository.findAll();
 	}
 
+	public List<Link> findByUsername(String username){
+		List<Link> links = repository.findByOwner(username);
+		return links;
+	}
+
 	public String createNewLink(
 			@Nonnull String url,
-			@Nullable Long id) {
+			@Nullable String username) {
 
-		Boolean isRegisteredUser = id != null;
+
+		Boolean isRegisteredUser = username != null;
 
 		Instant now = Instant.now();
 		Instant expiration = isRegisteredUser ? now.plus(5, ChronoUnit.YEARS) : now.plus(1, ChronoUnit.DAYS);
 
-		Link l = new Link(null, url, expiration);
-
-		if( isRegisteredUser ) {
-			userRepository.appendLink(id, l);
-		}
+		Link l = new Link(null, url, expiration, username);
 
 		repository.save(l);
 		return l.getAccesssKey();

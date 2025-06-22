@@ -9,41 +9,47 @@ public class Link implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	
-	private String url;
+
 	private String redirect;
-	
 	private Instant expiration;
+
+	private String owner;
 	
-	private User owner;
-	
-	private String accesssKey;
+	private String accessKey;
 	
 	public Link() {}
 
-	public Link(Long id, String url, String redirect, Instant expiration, User owner) {
+	public Link(Long id, String redirect, Instant expiration, String owner) {
 		this.id = id;
-		this.url = url;
 		this.redirect = redirect;
 		this.expiration = expiration;
-		this.accesssKey = "";
+		this.accessKey = generateAccessKey(); 
 		this.owner = owner;
 	}
 
+	private String generateAccessKey() {
+		return null;
+	}
+	
+	
 	public Long getId() {
 		return id;
 	}
 
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getAccessKey() {
+		return accessKey;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getRedirect() {
@@ -77,5 +83,9 @@ public class Link implements Serializable {
 			return false;
 		Link other = (Link) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public String getAccesssKey() {
+		return accessKey;
 	}
 }

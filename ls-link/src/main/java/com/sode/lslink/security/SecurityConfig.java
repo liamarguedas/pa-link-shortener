@@ -14,11 +14,10 @@ public class SecurityConfig {
      SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/redirect/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/urls/create").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/urls/all").hasRole("SCOPE_link:revoke")
-                        .requestMatchers(HttpMethod.DELETE, "/urls/revoke/*").hasRole("SCOPE_link:revoke")
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.GET, "/urls/all").hasRole("SCOPE_service:revoke")
+                        .requestMatchers(HttpMethod.DELETE, "/urls/revoke/*").hasRole("SCOPE_service:revoke")
+                        .requestMatchers(HttpMethod.GET, "/urls/all/*").hasRole("SCOPE_service:user")
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())

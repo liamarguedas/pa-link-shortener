@@ -1,11 +1,9 @@
-package com.sode.lsrevoker.config;
+package com.sode.lsuser.config;
 
-import com.sode.lsrevoker.security.TokenService;
+import com.sode.lsuser.security.TokenService;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 public class FeignConfiguration {
 
     @Bean

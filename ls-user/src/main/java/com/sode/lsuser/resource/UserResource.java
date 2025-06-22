@@ -1,5 +1,6 @@
 package com.sode.lsuser.resource;
 
+import com.sode.lsuser.client.FeignLink;
 import com.sode.lsuser.dto.UserDTO;
 import com.sode.lsuser.entity.Link;
 import com.sode.lsuser.entity.User;
@@ -18,6 +19,10 @@ public class UserResource {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private FeignLink linkService;
+
+	/* ADD PAGINATION */
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> checkAll() {
 
@@ -32,10 +37,13 @@ public class UserResource {
 		return ResponseEntity.ok().body(u);
 	}
 
-	@PostMapping("/append/{id}/{link}")
-	public ResponseEntity<Void> appendLink (@PathVariable Long id, @PathVariable Link link) {
-		userService.appendLink(id, link);
-		return ResponseEntity.noContent().build();
+	@GetMapping("/{id}/links")
+	public ResponseEntity<List<Link>> getLinksByUserId(@PathVariable Long id) {
+
+		User u = userService.findById(id);
+		List<Link> links = linkService.getAllLinksByUsername(u.getUsername()).getBody();
+
+		return ResponseEntity.ok().body(links);
 	}
 
 	@PostMapping("/register")
@@ -45,6 +53,7 @@ public class UserResource {
 
 		try {
 			userService.createUser(u);
+
 		} catch (Exception e) {
 
 			// TODO -------------------------------------

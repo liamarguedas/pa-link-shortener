@@ -75,15 +75,23 @@ public class AuthServerConfig {
 						.build())
 				.build();
 
-		RegisteredClient revokerClient = RegisteredClient
+		RegisteredClient lsRevokerClient = RegisteredClient
 				.withId(UUID.randomUUID().toString())
 				.clientId("revoker-client")
 				.clientSecret(passwordEncoder().encode("revoker-secret"))
 				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-				.scope("link:revoke")
+				.scope("service:revoke")
 				.build();
 
-		return new InMemoryRegisteredClientRepository(userClient, revokerClient);
+		RegisteredClient lsUserClient = RegisteredClient
+				.withId(UUID.randomUUID().toString())
+				.clientId("user-client")
+				.clientSecret(passwordEncoder().encode("user-secret"))
+				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+				.scope("service:user")
+				.build();
+
+		return new InMemoryRegisteredClientRepository(userClient, lsRevokerClient, lsUserClient);
 	}
 
 	@Bean

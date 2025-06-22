@@ -1,4 +1,4 @@
-package com.sode.lsrevoker.security;
+package com.sode.lsuser.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,11 @@ public class TokenService {
     @Value("${property.issuer}")
     private String authServer;
 
-    @Value("${property.issuer}")
-    private String revokerClient;
+    @Value("${property.client}")
+    private String userClient;
 
-    @Value("${property.issuer}")
-    private String revokerClientSecret;
+    @Value("${property.secret}")
+    private String userClientSecret;
 
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
@@ -34,9 +34,9 @@ public class TokenService {
 
         return webClient.post()
                 .uri(authServer + "/oauth2/token")
-                .headers(headers -> headers.setBasicAuth(revokerClient, revokerClientSecret))
+                .headers(headers -> headers.setBasicAuth(userClient, userClientSecret))
                 .body(BodyInserters.fromFormData("grant_type", "client_credentials")
-                        .with("scope", "service:revoke"))
+                        .with("scope", "service:user"))
                 .retrieve()
                 .bodyToMono(Map.class)
                 .map(body -> {

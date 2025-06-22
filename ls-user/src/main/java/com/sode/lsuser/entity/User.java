@@ -3,7 +3,9 @@ package com.sode.lsuser.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -34,8 +36,6 @@ public class User implements Serializable {
 			inverseJoinColumns = @JoinColumn(name="role_id")
 			)
 	private Set<Role> roles = new HashSet<>();
-	
-	private List<Link> links = new ArrayList<>();
 	
 	public User() {}
 
@@ -117,7 +117,4 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
-    public List<Link> getLinks() {
-        return links;
-    }
 }

@@ -1,17 +1,11 @@
 package com.sode.lslink.entity;
 
+import com.sode.lslink.utils.Linker;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
-
-import com.sode.lslink.utils.Linker;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 
 @Entity
@@ -23,24 +17,22 @@ public class Link implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String redirect;
-	
 	private Instant expiration;
-	
-//	@ManyToOne
-//	private User owner;
+
+	private String owner;
 	
 	private String accessKey;
 	
 	public Link() {}
 
-	public Link(Long id, String redirect, Instant expiration ) {
+	public Link(Long id, String redirect, Instant expiration, String owner) {
 		this.id = id;
 		this.redirect = redirect;
 		this.expiration = expiration;
 		this.accessKey = generateAccessKey(); 
-//		this.owner = owner;
+		this.owner = owner;
 	}
 
 	private String generateAccessKey() {
@@ -54,6 +46,18 @@ public class Link implements Serializable {
 	
 	public Long getId() {
 		return id;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getAccessKey() {
+		return accessKey;
 	}
 
 	public void setId(Long id) {
