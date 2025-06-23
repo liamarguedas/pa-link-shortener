@@ -16,10 +16,10 @@ public class TokenService {
     @Value("${property.issuer}")
     private String authServer;
 
-    @Value("${property.issuer}")
+    @Value("${property.client}")
     private String revokerClient;
 
-    @Value("${property.issuer}")
+    @Value("${property.secret}")
     private String revokerClientSecret;
 
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
