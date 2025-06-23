@@ -34,7 +34,7 @@ public class LinkService {
 		Boolean isRegisteredUser = username != null;
 
 		Instant now = Instant.now();
-		Instant expiration = isRegisteredUser ? now.plus(5, ChronoUnit.YEARS) : now.plus(1, ChronoUnit.DAYS);
+		Instant expiration = isRegisteredUser ? now.plus(1825, ChronoUnit.DAYS) : now.plus(1, ChronoUnit.DAYS);
 
 		Link l = new Link(null, url, expiration, username);
 
