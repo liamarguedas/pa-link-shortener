@@ -1,4 +1,4 @@
-package com.sode.lslink.security;
+package com.sode.lsuser.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,13 +31,10 @@ public class SecurityConfig {
                     }))
                     .authorizeHttpRequests(auth -> auth
                             // SECURED ENDPOINTS
-                            .requestMatchers(HttpMethod.GET, "/urls/all").hasAuthority("SCOPE_service:revoke")
-                            .requestMatchers(HttpMethod.DELETE, "/urls/revoke/*").hasAuthority("SCOPE_service:revoke")
-                            .requestMatchers(HttpMethod.GET, "/urls/all/*").hasAuthority("SCOPE_service:user")
+                            .requestMatchers(HttpMethod.GET, "/users/*/links").authenticated()
 
                             // PUBLIC ENDPOINTS
-                            .requestMatchers(HttpMethod.POST, "/urls/create").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/urls/redirect/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
 
                             // Everything else
                             .anyRequest().authenticated()

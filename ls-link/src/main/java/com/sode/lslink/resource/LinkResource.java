@@ -40,7 +40,7 @@ public class LinkResource {
 	public ResponseEntity<Void> revokeLink(
 			@PathVariable("id") Long id){
 
-		logger.info("Revoke requesition from: ls-revoke, {}", id);
+		logger.info("Revoke requisition from: ls-revoke, {}", id);
 		service.deleteLink(id);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -59,6 +59,7 @@ public class LinkResource {
 
 	@GetMapping("/redirect/{accessKey}")
 	public RedirectView redirect(@PathVariable("accessKey") String accessKey){
+		logger.info("Redirect request from: {}", accessKey);
 		String redirectUrl = service.getRedirect(accessKey);
 		return new RedirectView(redirectUrl);
 	}
@@ -76,8 +77,4 @@ public class LinkResource {
 
 		return ResponseEntity.ok().body(accessKey);
 	}
-
-
-
-	
 }

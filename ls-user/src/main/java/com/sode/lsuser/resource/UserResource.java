@@ -5,9 +5,13 @@ import com.sode.lsuser.dto.UserDTO;
 import com.sode.lsuser.entity.Link;
 import com.sode.lsuser.entity.User;
 import com.sode.lsuser.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,28 +26,24 @@ public class UserResource {
 	@Autowired
 	private FeignLink linkService;
 
-	/* ADD PAGINATION */
-	@GetMapping("/all")
-	public ResponseEntity<List<User>> checkAll() {
-
-		List<User> all = userService.checkAll();
-
-		return ResponseEntity.ok().body(all);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<User> getById(@PathVariable Long id) {
-		User u = userService.findById(id);
-		return ResponseEntity.ok().body(u);
-	}
+	private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
 	@GetMapping("/{id}/links")
-	public ResponseEntity<List<Link>> getLinksByUserId(@PathVariable Long id) {
+	public ResponseEntity<List<Link>> getLinksByUserId(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable Long id) {
 
+		String username = jwt.getSubject();
 		User u = userService.findById(id);
-		List<Link> links = linkService.getAllLinksByUsername(u.getUsername()).getBody();
 
-		return ResponseEntity.ok().body(links);
+		if ( username.equals(u.getUsername()) ) {
+
+			List<Link> links = linkService.getAllLinksByUsername(u.getUsername()).getBody();
+			return ResponseEntity.ok().body(links);
+		}
+
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
 	}
 
 	@PostMapping("/register")
@@ -55,14 +55,10 @@ public class UserResource {
 			userService.createUser(u);
 
 		} catch (Exception e) {
-
 			// TODO -------------------------------------
 			// HANDLE USERNAME/EMAILS ALREADY REGISTERED!
-			e.printStackTrace();
-
+			logger.error(e.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-
 	}
-
 }
