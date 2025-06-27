@@ -5,7 +5,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.sode.lsoauth.entity.Jwks;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,12 +34,26 @@ import java.util.UUID;
 @Configuration
 public class AuthServerConfig {
 
-	@Value("${property.issuer}")
-	private String issuer;
 
-	@Value("${property.secret}")
-	private String secret;
+	private final JwtProperties jwtProperties;
+	private final ClientProperties clientProperties;
+	private final RevokerProperties revokerProperties;
+	private final OAuthProperties OAuthProperties;
+	private final UserProperties userProperties;
 
+	public AuthServerConfig(
+			JwtProperties jwtProperties,
+			ClientProperties clientProperties,
+			RevokerProperties revokerProperties,
+			OAuthProperties OAuthProperties,
+			UserProperties userProperties) {
+
+		this.jwtProperties = jwtProperties;
+		this.clientProperties = clientProperties;
+		this.revokerProperties = revokerProperties;
+		this.OAuthProperties = OAuthProperties;
+		this.userProperties = userProperties;
+	}
 
 	@Bean
 	JWKSource<SecurityContext> jwkSource() {
@@ -51,7 +64,7 @@ public class AuthServerConfig {
 
 	@Bean
 	AuthorizationServerSettings authSettings() {
-		return AuthorizationServerSettings.builder().issuer(issuer).build();
+		return AuthorizationServerSettings.builder().issuer(OAuthProperties.getIssuer()).build();
 	}
 
 	@Bean
@@ -103,14 +116,14 @@ public class AuthServerConfig {
 
 		return args -> {
 
-			if (jdbcRepository.findByClientId("user-auth") == null) {
+			if (jdbcRepository.findByClientId(userProperties.getClient()) == null) {
 
 				RegisteredClient userClient = RegisteredClient
 						.withId(UUID.randomUUID().toString())
-						.clientId("user-auth")
-						.clientSecret(passwordEncoder().encode(secret))
+						.clientId(userProperties.getClient())
+						.clientSecret(passwordEncoder().encode(userProperties.getSecret()))
 						.redirectUri("https://oauth.pstmn.io/v1/callback")
-						.redirectUri(issuer + "/login/oauth2/code/test")
+						.redirectUri(OAuthProperties.getIssuer() + "/login/oauth2/code/test")
 						.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 						.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 						.scope("read")
@@ -125,24 +138,24 @@ public class AuthServerConfig {
 				jdbcRepository.save(userClient);
 			}
 
-			if(jdbcRepository.findByClientId("revoker-client") == null) {
+			if(jdbcRepository.findByClientId(revokerProperties.getClient()) == null) {
 
 			RegisteredClient lsRevokerClient = RegisteredClient
 					.withId(UUID.randomUUID().toString())
-					.clientId("revoker-client")
-					.clientSecret(passwordEncoder().encode("revoker-secret"))
+					.clientId(revokerProperties.getClient())
+					.clientSecret(passwordEncoder().encode(revokerProperties.getSecret()))
 					.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 					.scope("service:revoke")
 					.build();
 
 			jdbcRepository.save(lsRevokerClient);
 		}
-			if(jdbcRepository.findByClientId("user-client") == null) {
+			if(jdbcRepository.findByClientId(clientProperties.getClient()) == null) {
 
 				RegisteredClient lsUserClient = RegisteredClient
 						.withId(UUID.randomUUID().toString())
-						.clientId("user-client")
-						.clientSecret(passwordEncoder().encode("user-secret"))
+						.clientId(clientProperties.getClient())
+						.clientSecret(passwordEncoder().encode(clientProperties.getSecret()))
 						.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 						.scope("service:user")
 						.build();

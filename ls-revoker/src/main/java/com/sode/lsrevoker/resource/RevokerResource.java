@@ -1,11 +1,12 @@
 package com.sode.lsrevoker.resource;
 
+import com.sode.lsrevoker.config.PropertyConfig;
 import com.sode.lsrevoker.entity.Link;
 import com.sode.lsrevoker.service.RevokerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,19 +20,23 @@ public class RevokerResource {
 	@Autowired
 	private RevokerService service;
 
-	@Value("${property.issuer}")
 	private String issuer;
 
-	@Value("${property.client}")
 	private String client;
 
-	@Value("${property.secret}")
 	private String secret;
+
+	private final PropertyConfig config;
 
 	private final WebClient webClient;
 
-	public RevokerResource(WebClient.Builder webClientBuilder) {
+	public RevokerResource(WebClient.Builder webClientBuilder, @Qualifier("ls-com.sode.lsrevoker.config.PropertyConfig") PropertyConfig config) {
+		this.config = config;
 		this.webClient = webClientBuilder.build();
+
+		this.issuer = config.getIssuer();
+		this.client = config.getClient();
+		this.secret = config.getSecret();
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(RevokerResource.class);

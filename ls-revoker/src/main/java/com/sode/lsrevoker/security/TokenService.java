@@ -1,8 +1,9 @@
 package com.sode.lsrevoker.security;
 
+import com.sode.lsrevoker.config.PropertyConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,28 +14,24 @@ import java.util.Map;
 @Service
 public class TokenService {
 
-    @Value("${property.issuer}")
-    private String authServer;
-
-    @Value("${property.client}")
-    private String revokerClient;
-
-    @Value("${property.secret}")
-    private String revokerClientSecret;
-
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
     private final WebClient webClient;
 
-    public TokenService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(authServer).build();
+    private final PropertyConfig config;
+
+    public TokenService(WebClient.Builder webClientBuilder, @Qualifier("ls-com.sode.lsrevoker.config.PropertyConfig") PropertyConfig config) {
+
+        this.config = config;
+        this.webClient = webClientBuilder.baseUrl(config.getIssuer()).build();
     }
-    public Mono<String> getAccessToken() {
+
+      public Mono<String> getAccessToken() {
         logger.info("Requesting token");
 
         return webClient.post()
-                .uri(authServer + "/oauth2/token")
-                .headers(headers -> headers.setBasicAuth(revokerClient, revokerClientSecret))
+                .uri(config.getIssuer() + "/oauth2/token")
+                .headers(headers -> headers.setBasicAuth(config.getClient(), config.getSecret()))
                 .body(BodyInserters.fromFormData("grant_type", "client_credentials")
                         .with("scope", "service:revoke"))
                 .retrieve()
