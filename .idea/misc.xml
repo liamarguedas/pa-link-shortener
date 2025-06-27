@@ -13,6 +13,8 @@
         <option value="$PROJECT_DIR$/ls-oauth/pom.xml" />
         <option value="$PROJECT_DIR$/ls-revoker/pom.xml" />
         <option value="$PROJECT_DIR$/ls-user/pom.xml" />
+        <option value="$PROJECT_DIR$/ls-config-server/ls-config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/ls-config-server/pom.xml" />
       </list>
     </option>
   </component>

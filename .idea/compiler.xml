@@ -7,17 +7,19 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ls-eureka-server" />
+        <module name="ls-revoker" />
         <module name="ls-api-gateway" />
         <module name="ls-link" />
         <module name="ls-oauth" />
         <module name="ls-user" />
-        <module name="ls-revoker" />
+        <module name="ls-config-server" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ls-api-gateway" options="-parameters" />
+      <module name="ls-config-server" options="-parameters" />
       <module name="ls-eureka-server" options="-parameters" />
       <module name="ls-link" options="-parameters" />
       <module name="ls-oauth" options="-parameters" />
