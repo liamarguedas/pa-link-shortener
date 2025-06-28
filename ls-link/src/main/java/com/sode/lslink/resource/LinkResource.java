@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/urls")
@@ -65,7 +66,7 @@ public class LinkResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<String> createNewLink(
+	public ResponseEntity<Map<String, String>> createNewLink(
 			@AuthenticationPrincipal Jwt jwt,
 			@RequestBody LinkDTO redirect
 	){
@@ -75,6 +76,6 @@ public class LinkResource {
 
 		String accessKey = service.createNewLink(redirect.getLink(), username);
 
-		return ResponseEntity.ok().body(accessKey);
+		return ResponseEntity.ok().body(Map.of("accessKey", accessKey));
 	}
 }

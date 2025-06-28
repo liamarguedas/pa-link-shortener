@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sode</groupId>
-    <artifactId>ls-config-server</artifactId>
+    <artifactId>ls-com.sode.lsapigateway.config-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ls-config-server</name>
-    <description>ls-config-server</description>
+    <name>ls-com.sode.lsapigateway.config-server</name>
+    <description>ls-com.sode.lsapigateway.config-server</description>
     <url/>
     <licenses>
         <license/>
@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
+            <artifactId>spring-cloud-com.sode.lsapigateway.config-server</artifactId>
         </dependency>
 
         <dependency>

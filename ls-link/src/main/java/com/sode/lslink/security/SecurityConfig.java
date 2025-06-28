@@ -9,9 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -22,14 +19,11 @@ public class SecurityConfig {
 
             http
                     .csrf(csrf -> csrf.disable())
-                    .cors(cors -> cors.configurationSource(request -> {
-                        CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(List.of("*"));
-                        config.setAllowedMethods(List.of("GET", "POST", "DELETE"));
-                        config.setAllowedHeaders(List.of("*"));
-                        return config;
-                    }))
+                    .cors(cors -> cors.disable())
                     .authorizeHttpRequests(auth -> auth
+
+                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                             // SECURED ENDPOINTS
                             .requestMatchers(HttpMethod.GET, "/urls/all").hasAuthority("SCOPE_service:revoke")
                             .requestMatchers(HttpMethod.DELETE, "/urls/revoke/*").hasAuthority("SCOPE_service:revoke")
