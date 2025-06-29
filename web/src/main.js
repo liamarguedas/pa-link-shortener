@@ -24,7 +24,7 @@ form.addEventListener("submit", async (e) => {
     const data = await response.json();
     const accessKey = data.accessKey;
 
-    const shortenedUrl = `http://localhost:8080/ls-link/urls/redirect/${accessKey}`;
+    const shortenedUrl = `http://localhost:8080/${accessKey}`;
     shortLink.href = shortenedUrl;
     shortLink.textContent = shortenedUrl;
     resultDiv.style.display = "block";

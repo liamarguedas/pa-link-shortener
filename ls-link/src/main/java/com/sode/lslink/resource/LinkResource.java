@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Map;
@@ -59,10 +58,10 @@ public class LinkResource {
 	}
 
 	@GetMapping("/redirect/{accessKey}")
-	public RedirectView redirect(@PathVariable("accessKey") String accessKey){
+	public ResponseEntity<String> redirect(@PathVariable("accessKey") String accessKey){
 		logger.info("Redirect request from: {}", accessKey);
 		String redirectUrl = service.getRedirect(accessKey);
-		return new RedirectView(redirectUrl);
+		return ResponseEntity.status(HttpStatus.FOUND).body(redirectUrl);
 	}
 	
 	@PostMapping("/create")
