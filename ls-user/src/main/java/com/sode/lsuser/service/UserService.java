@@ -32,6 +32,7 @@ public class UserService {
 	}
 
 	public void createUser(User u) {
+
 		u.getRoles().add(userRole);
 		userRepository.save(u);
 	}

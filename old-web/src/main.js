@@ -2,7 +2,6 @@ const form = document.getElementById("shorten-form");
 const urlInput = document.getElementById("url-input");
 const resultDiv = document.getElementById("result");
 const shortLink = document.getElementById("short-link");
-const token = localStorage.getItem("token");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -14,7 +13,6 @@ form.addEventListener("submit", async (e) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, // Include token for authentication
       },
       body: JSON.stringify({ link: url }),
     });

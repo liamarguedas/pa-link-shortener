@@ -1,21 +1,21 @@
-package com.sode.lsoauth.config;
+package com.sode.lsoauth.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "oauth.service.user")
-public class ClientProperties {
+@ConfigurationProperties(prefix = "ls.oauth")
+public class OAuthProperties {
 
-    private String client;
+    private String issuer;
     private String secret;
 
-    public String getClient() {
-        return client;
+    public String getIssuer() {
+        return issuer;
     }
 
-    public void setClient(String client) {
-        this.client = client;
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
     }
 
     public String getSecret() {

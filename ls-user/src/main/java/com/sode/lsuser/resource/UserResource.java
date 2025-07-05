@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,9 @@ public class UserResource {
 
 	@Autowired
 	private FeignLink linkService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
@@ -49,10 +53,11 @@ public class UserResource {
 	@PostMapping("/register")
 	public ResponseEntity<Void> createUser(@RequestBody UserDTO udto) {
 
-		User u = new User(null, udto.getName(), udto.getUsername(), udto.getEmail(), udto.getPassword());
+		User u = new User(null, udto.getName(), udto.getUsername(), udto.getEmail(), passwordEncoder.encode(udto.getPassword()));
 
 		try {
 			userService.createUser(u);
+			logger.info("User created: " + udto.getUsername());
 
 		} catch (Exception e) {
 			// TODO -------------------------------------

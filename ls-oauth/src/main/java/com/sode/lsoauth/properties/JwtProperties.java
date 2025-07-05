@@ -1,4 +1,4 @@
-package com.sode.lsoauth.config;
+package com.sode.lsoauth.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
