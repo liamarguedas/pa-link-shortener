@@ -9,6 +9,7 @@ import com.sode.lsoauth.properties.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -81,6 +82,7 @@ public class AuthServerConfig {
 
 	@Bean
 	AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService);
 		authProvider.setPasswordEncoder(passwordEncoder);
@@ -89,6 +91,43 @@ public class AuthServerConfig {
 	}
 
 	@Bean
+	@Order(1)
+	SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+		http
+				.securityMatcher("/api/**")
+				.csrf(csrf -> csrf.disable())
+				.cors(cors -> cors.configurationSource(corsConfigurationSource))
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/auth/user", "/api/auth/test").permitAll()
+						.anyRequest().authenticated()
+				)
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.formLogin(AbstractHttpConfigurer::disable);
+
+		return http.build();
+	}
+
+	@Bean
+	@Order(2)
+	SecurityFilterChain authServerSecurity(HttpSecurity http) throws Exception {
+		OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+				new OAuth2AuthorizationServerConfigurer();
+
+		http
+				.securityMatcher("/oauth2/**", "/.well-known/**")
+				.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+				.csrf(csrf -> csrf
+						.ignoringRequestMatchers("/oauth2/**", "/.well-known/**")
+						.ignoringRequestMatchers("/api/auth/**")
+				)
+				.with(authorizationServerConfigurer, Customizer.withDefaults());
+
+		return http.build();
+	}
+
+/*
+	@Bean
 	SecurityFilterChain authServerSecurity(HttpSecurity http) throws Exception {
 
 		http
@@ -96,14 +135,17 @@ public class AuthServerConfig {
 				.cors(cors -> cors.configurationSource(corsConfigurationSource))
 				.httpBasic(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/auth/login").permitAll()
-						.anyRequest().authenticated())
+						.requestMatchers("/api/auth/user").permitAll()
+						.requestMatchers("/api/auth/test/*").permitAll()
+						.anyRequest().authenticated()
+				)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.formLogin(AbstractHttpConfigurer::disable)
 				.with(new OAuth2AuthorizationServerConfigurer(), Customizer.withDefaults());
 
 		return http.build();
 	}
+*/
 
 	@Bean
 	public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {

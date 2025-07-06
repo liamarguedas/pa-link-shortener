@@ -36,3 +36,34 @@ form.addEventListener("submit", async (e) => {
     alert(error.message);
   }
 });
+
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  const authButton = document.getElementById("auth-button");
+  const usernameDisplay = document.getElementById("username-display");
+
+  if (token) {
+    const payload = parseJwt(token);
+    if (payload && payload.sub) {
+      authButton.style.display = "none"; // Hide login/register button
+      usernameDisplay.textContent = `Hello, ${payload.sub}`;
+      usernameDisplay.style.display = "inline-block"; // Show username
+    }
+  }
+});

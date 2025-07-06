@@ -53,7 +53,7 @@ async function register(name, username, email, password) {
 
 async function login(username, password) {
   try {
-    const response = await fetch("http://localhost:9000/api/auth/login", {
+    const response = await fetch("http://localhost:9000/api/auth/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
