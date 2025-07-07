@@ -7,6 +7,15 @@ body {
   height: 100vh;
 }
 
+
+#links-table th:nth-child(1),
+#links-table th:nth-child(2),
+#links-table td:nth-child(1),
+#links-table td:nth-child(2) {
+  width: 30%;
+  word-break:break-all;
+}
+
 #shorten-form {
   max-width: 700px;
   margin: auto;

@@ -48,6 +48,15 @@ public class LinkService {
 		Link l = repository.findByAccessKey(accessKey);
 		return l.getRedirect();
 	}
+
+	public void deleteLink(Link link){
+		repository.delete(link);
+	}
+
+	public Link getLinkByAccessKey(@Nonnull String accessKey) {
+		Link l = repository.findByAccessKey(accessKey);
+		return l;
+	}
 	
 	
 	public void deleteLink(

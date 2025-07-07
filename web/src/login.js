@@ -67,7 +67,7 @@ async function login(username, password) {
     localStorage.setItem("token", data.token);
 
     // Redirect or load user info
-    window.location.href = "/home.html";
+    window.location.href = "/";
 
   } catch (error) {
     alert(error.message);

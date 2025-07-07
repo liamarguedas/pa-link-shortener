@@ -46,15 +46,36 @@ public class LinkResource {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@PreAuthorize("hasAuthority('SCOPE_service:user')")
+	@DeleteMapping("/{accessKey}/delete")
+	public ResponseEntity<Void> deleteLink(
+			@AuthenticationPrincipal Jwt jwt,
+			@PathVariable("accessKey")  String accessKey) {
+
+		Link l = service.getLinkByAccessKey(accessKey);
+
+		String loggedUsername = jwt.getSubject();
+		if (loggedUsername.equals(l.getOwner())) {
+			service.deleteLink(l);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+	}
+
+
 	@GetMapping("/all/{username}")
 	public ResponseEntity<List<Link>> getAllLinksByUsername(
+			@AuthenticationPrincipal Jwt jwt,
 			@PathVariable("username") @Nonnull String username
 	){
 
-		List<Link> links = service.findByUsername(username);
+		String loggedUsername = jwt.getSubject();
+		if(username.equals(loggedUsername)){
+			List<Link> links = service.findByUsername(username);
+			return ResponseEntity.ok().body(links);
+		}
 
-		return ResponseEntity.ok().body(links);
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
 	}
 
 	@GetMapping("/redirect/{accessKey}")

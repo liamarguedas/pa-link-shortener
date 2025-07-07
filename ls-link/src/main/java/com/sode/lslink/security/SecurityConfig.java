@@ -27,7 +27,8 @@ public class SecurityConfig {
                             // SECURED ENDPOINTS
                             .requestMatchers(HttpMethod.GET, "/urls/all").hasAuthority("SCOPE_service:revoke")
                             .requestMatchers(HttpMethod.DELETE, "/urls/revoke/*").hasAuthority("SCOPE_service:revoke")
-                            .requestMatchers(HttpMethod.GET, "/urls/all/*").hasAuthority("SCOPE_service:user")
+                            .requestMatchers(HttpMethod.GET, "/urls/all/*").authenticated()
+                            .requestMatchers(HttpMethod.DELETE, "urls/*/delete").authenticated()
 
                             // PUBLIC ENDPOINTS
                             .requestMatchers(HttpMethod.POST, "/urls/create").permitAll()
@@ -36,9 +37,7 @@ public class SecurityConfig {
                             // Everything else
                             .anyRequest().authenticated()
                     )
-                    .oauth2ResourceServer(oauth2 -> oauth2
-                            .jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthenticationConverter()))
-                    )
+                    .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthenticationConverter())))
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .anonymous(Customizer.withDefaults());
 
